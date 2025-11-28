@@ -1,0 +1,34 @@
+# VS Code
+.vscode/
+.vscode-server/
+*.code-workspace
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Node / frontend
+node_modules/
+dist/
+build/
+
+# Docker runtime data
+**/data/
+**/logs/
+**/tmp/
+**/temp/
+**/config/
+
+# Ignore all env files
+.env
+.env.*
+# But allow template/example env files
+!.env.template
+!.env.example
+
