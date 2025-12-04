@@ -1,0 +1,7 @@
+services:
+  twingate_connector:
+    container_name: twingate-connector
+    restart: always
+    image: "twingate/connector:${CONTAINER_VERSION}"
+    env_file:
+      - ./.env
