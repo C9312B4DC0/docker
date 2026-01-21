@@ -18,8 +18,8 @@ set -euo pipefail
 #     - data/
 #
 # And sets:
-#   - ~/komodo and subdirs owned by current user, group docker, mode 775
-#   - ~/komodo/stacks/<app_name> owned by current user:docker
+#   - ~/docker and subdirs owned by current user, group docker, mode 775
+#   - ~/docker/stacks/<app_name> owned by current user:docker
 #   - /opt/appdata/<app_name> owned by root:docker, mode 2775 (recursively)
 ###############################################################################
 
@@ -41,7 +41,7 @@ fi
 CURRENT_USER="${SUDO_USER:-$USER}"
 USER_HOME="$(eval echo "~${CURRENT_USER}")"
 
-KOMODO_DIR="${USER_HOME}/komodo"
+DOCKER_DIR="${USER_HOME}/docker"
 STACKS_DIR="${KOMODO_DIR}/stacks"
 STACK_APP_DIR="${STACKS_DIR}/${APP_NAME}"
 
@@ -63,7 +63,7 @@ if ! getent group docker >/dev/null 2>&1; then
 fi
 
 #----- 2. Ensure ~/komodo base permissions for docker group -------------------
-echo "==> Ensuring ~/komodo base directory and permissions"
+echo "==> Ensuring ~/docker directory and permissions"
 
 mkdir -p "${KOMODO_DIR}" "${STACKS_DIR}"
 
