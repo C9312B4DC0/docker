@@ -1,0 +1,27 @@
+name: dockhand-smoke
+
+services:
+  probe:
+    image: docker.io/library/busybox:1.37.0@sha256:a7dbc319b1438115a207e11930dc4bb3e643dcb3ec0bdd694bb36cd8fad289ec
+    network_mode: none
+    user: "65534:65534"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        printf '%s\n' dockhand-smoke-ok > /tmp/index.html
+        exec httpd -f -p 127.0.0.1:8080 -h /tmp
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'test "$(wget -qO- http://127.0.0.1:8080/)" = dockhand-smoke-ok'
+      interval: 5s
+      timeout: 2s
+      retries: 3

@@ -1,0 +1,31 @@
+name: dockhand
+
+services:
+  dockhand:
+    image: docker.io/fnsys/dockhand:v1.0.57@sha256:4fd64d32728c99e5caf39b952a17d85448ee0b8ae76e0961f719ba2e19013988
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      HOST: ${DOCKHAND_BIND:-127.0.0.1}
+      PORT: ${DOCKHAND_PORT:-3000}
+      COOKIE_SECURE: "true"
+      HTTPS_MODE: "on"
+      HTTPS_CERT_PATH: /etc/dockhand/tls/cert.pem
+      HTTPS_KEY_PATH: /etc/dockhand/tls/key.pem
+      STACKS_DIR: ${DOCKHAND_STACKS_DIR:-/opt/containers/stacks/dockhand-managed}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - dockhand-data:/app/data
+      - ./tls:/etc/dockhand/tls:ro,Z
+      - ${DOCKHAND_STACKS_DIR:-/opt/containers/stacks/dockhand-managed}:${DOCKHAND_STACKS_DIR:-/opt/containers/stacks/dockhand-managed}:Z
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'curl -fsS --cacert "$$HTTPS_CERT_PATH" "https://$$HOST:$$PORT/api/health" >/dev/null'
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  dockhand-data:
